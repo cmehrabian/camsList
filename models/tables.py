@@ -36,6 +36,6 @@ db.camsList.name.default = get_first_name()
 db.camsList.date_posted.default = datetime.utcnow()
 db.camsList.user_id.default = auth.user_id
 
-db.bboard.email.requires = IS_EMAIL()\
-db.bboard.category.default = 'Misc'
-db.bboard.category.required = True
+db.camsList.email.requires = IS_EMAIL()
+db.camsList.category.default = 'Misc'
+db.camsList.category.required = True
