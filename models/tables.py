@@ -15,6 +15,8 @@ def get_first_name():
 		name = auth.user.first_name
 	return name
 
+CATEGORY = ['For Sale', 'Trade', 'Wanted', 'Misc']
+
 db.define_table('camsList',
 	Field('listTitle'),
 	Field('clmessage', 'text'),
@@ -33,3 +35,7 @@ db.camsList.clmessage.label = 'Posting body'
 db.camsList.name.default = get_first_name()
 db.camsList.date_posted.default = datetime.utcnow()
 db.camsList.user_id.default = auth.user_id
+
+db.bboard.email.requires = IS_EMAIL()\
+db.bboard.category.default = 'Misc'
+db.bboard.category.required = True
