@@ -13,8 +13,48 @@ def index():
     """
     Landing page for CamsList
     """
+    redirect(URL('default', 'home'))
     posts = db().select(db.camsList.ALL)
+
     return dict(posts=posts)
+
+
+def home():
+    q = db.camsList
+
+    def generate_del_button(row):
+        b = ''
+        if auth.user_id == row.user_id:
+            b = A('Delete', _class='btn', _href=URL('default', 'delete', args=[row.id]))
+        return b
+    def generate_edit_button(row):
+        b = ''
+        if auth.user_id == row.user_id:
+            b = A('Edit', _class='btn', _href=URL('default', 'edit', args=[row.id]))
+        return b
+
+    def shorten_post(row):
+        return row.clmessage[:10] + '...'
+
+    links = [
+        dict(header='', body= generate_del_button),
+        dict(header='', body=generate_edit_button),
+    ]
+
+    if len(request.args) == 0:
+        links.append(dict(header='Post', body = shorten_post))
+        db.camsList.clmessage.readable = False
+
+    form = SQLFORM.grid(q,
+        fields = [db.camsList.user_id, db.camsList.listTitle, db.camsList.image, db.camsList.price, db.camsList.clmessage, db.camsList.date_posted],
+        editable=False, 
+        deletable=False,
+        links=links,
+
+        )
+    return dict(form=form)
+
+
 
 @auth.requires_login()
 
@@ -26,6 +66,34 @@ def add():
         session.flash = T('Added')
         redirect(URL('default', 'index'))
     return dict(form=form)
+
+def view():
+    p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
+    form = SQLFORM(db.camsList, record=p, readonly=True)
+    return dict(form=form)
+@auth.requires_login()
+
+def edit():
+    p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
+    if p.user_id != auth.user_id: #OWNER OF THE POST
+        session.flash = T('not authorized')
+        redirect(URL('default', 'index'))
+    form = SQLFORM(db.camsList, record=p)
+    if form.process().accepted:
+        session.flash = T('Updated')
+        redirect(URL('default', 'view', args=[p.id]))
+    return dict(form=form)    
+
+@auth.requires_login()
+@auth.requires_signature()
+def delete():
+    p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
+    if p.user_id != auth.user_id:
+        session.flash = T('not authorized')
+        redirect(URL('default', 'index'))
+    db(db.camsList.id == p.id).delete()
+    redirect(URL('default', 'index'))
+
 
 
 def user():

@@ -8,7 +8,13 @@
 
 <ul>
 {{for p in posts:}}
-<li>Posts by: {{=p.name}}, posted on {{=p.date_posted}}</li>
+<li>Posts by: {{=p.name}}, posted on {{=p.date_posted}}
+({{=A('Read', _href=URL('default', 'view', args=[p.id]))}})
+({{=A('Delete', _href=URL('default', 'delete', args=[p.id], user_signature=True))}})
+({{=A('Edit', _href=URL('default', 'edit', args=[p.id]))}})
+
+
+</li>
 {{pass}}
 </ul>
 
