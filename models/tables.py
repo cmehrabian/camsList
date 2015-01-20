@@ -20,7 +20,7 @@ CATEGORY = ['For Sale', 'Wanted', 'Trade', 'Misc']
 db.define_table('camsList',
 	Field('listTitle'),
 	Field('clmessage', 'text'),
-	Field('image'),	#add image upload api
+	Field('image', 'upload'),	#add image upload api
 	Field('price'),
 	Field('name'),
 	Field('user_id', db.auth_user),

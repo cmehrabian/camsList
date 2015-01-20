@@ -46,15 +46,13 @@ def home():
         db.camsList.clmessage.readable = False
 
     form = SQLFORM.grid(q,
-        fields = [db.camsList.user_id, db.camsList.listTitle, db.camsList.image, db.camsList.price, db.camsList.clmessage, db.camsList.date_posted],
+        fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price,  db.camsList.date_posted, db.camsList.clmessage],
         editable=False, 
         deletable=False,
         links=links,
 
         )
     return dict(form=form)
-
-
 
 @auth.requires_login()
 
