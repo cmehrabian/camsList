@@ -40,4 +40,4 @@ db.camsList.email.requires = IS_EMAIL()
 db.camsList.category.default = 'Trade'
 db.camsList.category.required = True
 db.camsList.category.requires = IS_IN_SET(CATEGORY)
-db.camsList.sold.defautl = False
+db.camsList.sold.default = False #set boolean
