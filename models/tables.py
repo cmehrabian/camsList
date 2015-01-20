@@ -37,5 +37,7 @@ db.camsList.date_posted.default = datetime.utcnow()
 db.camsList.user_id.default = auth.user_id
 
 db.camsList.email.requires = IS_EMAIL()
-db.camsList.category.default = 'Misc'
+db.camsList.category.default = 'Trade'
 db.camsList.category.required = True
+db.camsList.category.requires = IS_IN_SET(CATEGORY)
+db.camsList.sold.defautl = False
