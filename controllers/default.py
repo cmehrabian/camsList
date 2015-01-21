@@ -34,7 +34,7 @@ def home():
         return b
 
     def shorten_post(row):
-        return row.clmessage[:10] + '...'
+        return row.clmessage[:25] + '...'
 
     links = [
         dict(header='', body= generate_del_button),
@@ -42,11 +42,11 @@ def home():
     ]
 
     if len(request.args) == 0:
-        links.append(dict(header='Post', body = shorten_post))
+        links.append(dict(header='Summary', body = shorten_post))
         db.camsList.clmessage.readable = False
 
     form = SQLFORM.grid(q,
-        fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price,  db.camsList.date_posted, db.camsList.clmessage],
+        fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
         editable=False, 
         deletable=False,
         links=links,

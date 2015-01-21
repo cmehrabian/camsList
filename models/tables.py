@@ -20,7 +20,7 @@ CATEGORY = ['For Sale', 'Wanted', 'Trade', 'Misc']
 db.define_table('camsList',
 	Field('listTitle'),
 	Field('clmessage', 'text'),
-	Field('image', 'upload'),	#add image upload api
+	Field('image', 'upload'),
 	Field('price'),
 	Field('name'),
 	Field('user_id', db.auth_user),
@@ -46,5 +46,7 @@ db.camsList.category.required = True
 db.camsList.category.requires = IS_IN_SET(CATEGORY)
 db.camsList.sold.default = False #set boolean
 db.camsList.price.requires = IS_NOT_EMPTY()
+
+db.camsList.price.requires = IS_FLOAT_IN_RANGE(0, 100000.0, error_message='The price should be in the range 0..100000')
 
 
