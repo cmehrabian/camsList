@@ -73,6 +73,7 @@ def view():
 
 def edit():
     p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
+    db.camsList.sold.writable = True
     if p.user_id != auth.user_id: #OWNER OF THE POST
         session.flash = T('not authorized')
         redirect(URL('default', 'index'))
