@@ -25,6 +25,10 @@ def home():
     # def generate_search_button(row):
     #     b = ''
     #     b = A('Search', class='btn', XML('&#10006;'), _href )
+
+    def generate_search_button(row):
+        b = A('Search', _class="btn", _href=URL('default', 'search', args=[row.id]))
+
     def generate_del_button(row):
         b = ''
         if auth.user_id == row.user_id:
