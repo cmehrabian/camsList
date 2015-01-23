@@ -270,7 +270,7 @@ div.error {
 .web2py_console button {
     line-height: 20px;
     margin-right: 5px; display: inline-block;
-    padding: 3px 5px 3px 5px;
+    padding: 3px 18px 3px 5px;
 }
 
 .web2py_counter {

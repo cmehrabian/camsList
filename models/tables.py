@@ -17,21 +17,29 @@ def get_first_name():
 
 CATEGORY = ['For Sale', 'Wanted', 'Trade', 'Misc']
 
+
+
 db.define_table('camsList',
 	Field('listTitle'),
 	Field('clmessage', 'text'),
-	Field('image', 'upload'),
+	Field('image', 'upload', default= 'path/'),
 	Field('price'),
+	Field('category'), #with autocomplete?
 	Field('name'),
 	Field('user_id', db.auth_user),
 	Field('phone'),
 	Field('email'),
 	Field('date_posted', 'datetime'),
-	Field('category'), #with autocomplete?
 	Field('sold', 'boolean'), #whether is sold or not. Use boolean with sold as default False
 	)
-db.camsList.listTitle.label = "Posting title"
-db.camsList.clmessage.label = 'Posting body' 
+
+
+db.camsList.price.label= 'Transaction'
+db.camsList.price.default= '"100 dollars for..."'
+
+db.camsList.listTitle.label = 'Posting'
+db.camsList.clmessage.label = '->' 
+
 db.camsList.name.default = get_first_name()
 db.camsList.date_posted.default = datetime.utcnow()
 db.camsList.user_id.default = auth.user_id
@@ -41,13 +49,14 @@ db.camsList.user_id.default = auth.user_id
 db.camsList.user_id.writable = db.camsList.user_id.readable = False
 
 db.camsList.email.requires = IS_EMAIL()
-db.camsList.category.default = 'For Sale'
+db.camsList.category.label = "ToT"
+db.camsList.category.default = 'Trade'
 db.camsList.category.required = True
 db.camsList.category.requires = IS_IN_SET(CATEGORY)
 db.camsList.sold.default = False #set boolean
 db.camsList.sold.writable = False
 db.camsList.price.requires = IS_NOT_EMPTY()
 
-db.camsList.price.requires = IS_FLOAT_IN_RANGE(0, 100000.0, error_message='The price should be in the range 0..100000')
+# db.camsList.price.requires = IS_FLOAT_IN_RANGE(0, 100000.0, error_message='The price should be in the range 0..100000')
 
 

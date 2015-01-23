@@ -22,6 +22,9 @@ def index():
 def home():
     q = db.camsList
 
+    # def generate_search_button(row):
+    #     b = ''
+    #     b = A('Search', class='btn', XML('&#10006;'), _href )
     def generate_del_button(row):
         b = ''
         if auth.user_id == row.user_id:
@@ -46,11 +49,12 @@ def home():
         db.camsList.clmessage.readable = False
 
     form = SQLFORM.grid(q,
-        fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
+        fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price, db.camsList.category,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
         editable=False, 
         deletable=False,
+        csv=False,
+        sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
         links=links,
-
         )
     return dict(form=form)
     
@@ -69,8 +73,8 @@ def view():
     p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
     form = SQLFORM(db.camsList, record=p, readonly=True)
     return dict(form=form)
-@auth.requires_login()
 
+@auth.requires_login()
 def edit():
     p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
     db.camsList.sold.writable = True
