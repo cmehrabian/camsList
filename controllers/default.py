@@ -52,6 +52,10 @@ def home():
         links.append(dict(header='Summary', body = shorten_post))
         db.camsList.clmessage.readable = False
 
+    {{if form.record.image != "":}}
+        {{=IMG (_src=URL('download',args=form.record.image))}}
+    {{pass}}
+
     form = SQLFORM.grid(q,
         fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price, db.camsList.category,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
         editable=False, 
