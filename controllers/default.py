@@ -32,7 +32,7 @@ def home():
     def generate_del_button(row):
         b = ''
         if auth.user_id == row.user_id:
-            b = A('Delete', _class='btn', _href=URL('default', 'delete', args=[row.id]))
+            b = A('Delete', _class='btn', _href=URL('default', 'delete', args=[row.id], user_signature=True))
         return b
     def generate_edit_button(row):
         b = ''
@@ -52,9 +52,9 @@ def home():
         links.append(dict(header='Summary', body = shorten_post))
         db.camsList.clmessage.readable = False
 
-    {{if form.record.image != "":}}
-        {{=IMG (_src=URL('download',args=form.record.image))}}
-    {{pass}}
+    # {{if form.record.image != "":}}
+    #     {{=IMG (_src=URL('download',args=form.record.image))}}
+    # {{pass}}
 
     form = SQLFORM.grid(q,
         fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price, db.camsList.category,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
