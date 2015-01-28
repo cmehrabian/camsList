@@ -15,12 +15,19 @@ def index():
     """
     redirect(URL('default', 'home'))
     posts = db().select(db.camsList.ALL)
+    # show_all = request.args(0) == 'all'
+
 
     return dict(posts=posts)
 
 
 def home():
-    q = db.camsList
+    show_all = request.args(0) == 'all'
+    show_all = True
+    q = (db.camsList) if show_all else (db.camsList.sold == False)
+
+
+
 
     # def generate_search_button(row):
     #     b = ''
@@ -39,11 +46,19 @@ def home():
         if auth.user_id == row.user_id:
             b = A('Edit', _class='btn', _href=URL('default', 'edit', args=[row.id]))
         return b
-    def generate_show_button(row):
+    def generate_toggle_button(row):
         b = ''
         if auth.user_id == row.user_id:
-            b = A('Show all Items', _class='btn')
+            b = A('Toggle', _class='btn', _href=URL('default', 'toggle_sold', args=[row.id], user_signature=True))
         return b
+
+
+    # def generate_show_button(row):
+    #     b = ''
+    #     if auth.user_id == row.user_id:
+    #         b = A('Show all Items', _class='btn')
+    #     return b
+
 
     def shorten_post(row):
         return row.clmessage[:25] + '...'
@@ -51,6 +66,7 @@ def home():
     links = [
         dict(header='', body= generate_del_button),
         dict(header='', body=generate_edit_button),
+        dict(header='', body=generate_toggle_button),
     ]
 
     if len(request.args) == 0:
@@ -60,16 +76,26 @@ def home():
     # {{if form.record.image != "":}}
     #     {{=IMG (_src=URL('download',args=form.record.image))}}
     # {{pass}}
-
-    form = SQLFORM.grid(q,
+    start_idx = 1 if show_all else 0
+    form = SQLFORM.grid(q, args=request.args[:start_idx],
         fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price, db.camsList.category,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
         editable=False, 
         deletable=False,
         csv=False,
         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
         links=links,
+        details = True,
         )
-    return dict(form=form)
+    return dict(form=form) #show_all=show_all)
+
+@auth.requires_login()
+def toggle_sold():
+     """Toggles the sold field of an item"""
+     item = db.camsList(request.args(0)) or redirect(URL('default', 'home'))
+     is_sold = item.sold
+     item.update_record(sold = not is_sold)
+     redirect(URL('default', 'home'))#, args=['all']))
+ 
     
 @auth.requires_login()
 def add():
@@ -81,8 +107,11 @@ def add():
         redirect(URL('default', 'index'))
     return dict(form=form)
 
+# def show_all():
+#     p = db.camsList(request.args(0) == 'all')
+
 def view():
-    p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
+    p = db.camsList(request.args(0)) or redirect(URL('default', 'home'))
     form = SQLFORM(db.camsList, record=p, readonly=True)
     return dict(form=form)
 
@@ -105,9 +134,12 @@ def delete():
     p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
     if p.user_id != auth.user_id:
         session.flash = T('not authorized')
-        redirect(URL('default', 'index'))
-    db(db.camsList.id == p.id).delete()
-    redirect(URL('default', 'index'))
+        redirect(URL('default', 'home'))    
+    form = FORM.confirm('Are you sure?')
+    if form.accepted:
+        db(db.camsList.id == p.id).delete()
+        redirect(URL('default', 'home'))
+    return dict(form=form)
 
 
 
