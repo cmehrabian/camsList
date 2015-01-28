@@ -39,6 +39,11 @@ def home():
         if auth.user_id == row.user_id:
             b = A('Edit', _class='btn', _href=URL('default', 'edit', args=[row.id]))
         return b
+    def generate_show_button(row):
+        b = ''
+        if auth.user_id == row.user_id:
+            b = A('Show all Items', _class='btn')
+        return b
 
     def shorten_post(row):
         return row.clmessage[:25] + '...'
@@ -67,7 +72,6 @@ def home():
     return dict(form=form)
     
 @auth.requires_login()
-
 def add():
     """Add a post"""
     form = SQLFORM(db.camsList)
