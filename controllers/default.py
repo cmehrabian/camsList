@@ -13,9 +13,11 @@ def index():
     """
     Landing page for CamsList
     """
-    redirect(URL('default', 'home'))
+    redirect(URL('default', 'home', args=['all']))
     posts = db().select(db.camsList.ALL)
     # show_all = request.args(0) == 'all'
+
+
 
 
     return dict(posts=posts)
@@ -23,19 +25,8 @@ def index():
 
 def home():
     show_all = request.args(0) == 'all'
-    show_all = True
     q = (db.camsList) if show_all else (db.camsList.sold == False)
-
-
-
-
-    # def generate_search_button(row):
-    #     b = ''
-    #     b = A('Search', class='btn', XML('&#10006;'), _href )
-
-    def generate_search_button(row):
-        b = A('Search', _class="btn", _href=URL('default', 'search', args=[row.id]))
-
+ 
     def generate_del_button(row):
         b = ''
         if auth.user_id == row.user_id:
@@ -53,13 +44,6 @@ def home():
         return b
 
 
-    # def generate_show_button(row):
-    #     b = ''
-    #     if auth.user_id == row.user_id:
-    #         b = A('Show all Items', _class='btn')
-    #     return b
-
-
     def shorten_post(row):
         return row.clmessage[:25] + '...'
 
@@ -67,6 +51,7 @@ def home():
         dict(header='', body= generate_del_button),
         dict(header='', body=generate_edit_button),
         dict(header='', body=generate_toggle_button),
+      #  dict(header='', body=generate_sold_toggle_button)
     ]
 
     if len(request.args) == 0:
@@ -76,6 +61,7 @@ def home():
     # {{if form.record.image != "":}}
     #     {{=IMG (_src=URL('download',args=form.record.image))}}
     # {{pass}}
+
     start_idx = 1 if show_all else 0
     form = SQLFORM.grid(q, args=request.args[:start_idx],
         fields = [db.camsList.user_id, db.camsList.image, db.camsList.listTitle, db.camsList.price, db.camsList.category,  db.camsList.date_posted, db.camsList.clmessage, db.camsList.sold],
@@ -84,9 +70,15 @@ def home():
         csv=False,
         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
         links=links,
-        details = True,
+        details = False,
         )
-    return dict(form=form) #show_all=show_all)
+
+    # button = ''
+    if show_all:
+        button = A('See unsold', _class='btn', _href=URL('default', 'home'))
+    else:
+        button = A('See all', _class='btn', _href=URL('default', 'home', args=['all']))
+    return dict(form=form, button=button)
 
 @auth.requires_login()
 def toggle_sold():
@@ -94,6 +86,7 @@ def toggle_sold():
      item = db.camsList(request.args(0)) or redirect(URL('default', 'home'))
      is_sold = item.sold
      item.update_record(sold = not is_sold)
+     #if URL is /all then redirect to there other wise to home
      redirect(URL('default', 'home'))#, args=['all']))
  
     

@@ -100,6 +100,7 @@
         <h1>
         {{=response.title or request.application}}
         <small>"Forget Craig and Angie, Remember Cam"</small>
+
         </h1>
       </div>
     </header>
@@ -115,10 +116,15 @@
         </div>
         {{pass}}
 
+
         <div class="{{=middle_columns}}">
+
           {{block center}}
           {{include}}
           {{end}}
+        </div>
+        <div class="right">
+        {{=button}}
         </div>
 
         {{if right_sidebar_enabled:}}
@@ -140,7 +146,7 @@
         <div class="copyright pull-left">{{=T('Copyright')}} &#169; 2011</div>
         <div id="poweredBy" class="pull-right">
           Powered by
-          <a href="http://www.fuckmap.meteor.com/">omari + web2py</a>
+          <a href="http://www.metacupcake.com">omari + web2py</a>
         </div>
       </div>
       {{end}}

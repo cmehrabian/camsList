@@ -25,16 +25,15 @@ There are no posts.
 {{pass}}
 
 <p>
-{{=A('Add a post', _class='btn', _href=URL('default', 'add'))}}
-<!-- {{=A('Show All', _class='btn', _href=URL('default', 'home', args=['all']))}}
-{{=button}}
- -->
- {{button = A('See all', _class='btn', _href=URL('default', 'index', args=['all']))}}
- {{=button}}
 
+
+
+<!-- {{=A('Add a post', _class='btn', _href=URL('default', 'add'))}}
 {{if show_all:}}
-	{{=A('See unsold', _class='btn', _href=URL('default', 'home'))}}
+{{=A('See unsold', _class='btn', _href=URL('default', 'index'))}}
 {{else:}}
-	{{=A('See all', _class='btn', _href=URL('default', 'home', args=['all']))}}
-{{pass}}
+{{=A('See all', _class='btn', _href=URL('default', 'index', args=['all']))}}
+{{pass}} -->
+
+<!-- {{=toggle}} -->
 </p>

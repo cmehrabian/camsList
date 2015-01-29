@@ -34,8 +34,9 @@ db.define_table('camsList',
 	)
 
 
+
 db.camsList.price.label= 'Transaction'
-db.camsList.price.default= '"100 dollars for..."'
+db.camsList.price.placeholder= '"100 dollars for..."'
 
 db.camsList.listTitle.label = 'Posting'
 db.camsList.clmessage.label = '->' 
@@ -53,7 +54,7 @@ db.camsList.category.label = "ToT"
 db.camsList.category.default = 'Trade'
 db.camsList.category.required = True
 db.camsList.category.requires = IS_IN_SET(CATEGORY)
-# db.camsList.sold.default = False #set boolean
+db.camsList.sold.default = False #set boolean
 db.camsList.sold.writable = False
 db.camsList.price.requires = IS_NOT_EMPTY()
 
