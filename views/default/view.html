@@ -2,6 +2,11 @@
 {{extend 'layout.html'}}
 
 <h1>Post</h1> 
+
+{{button = ''}}
 {{=form}}
 <!-- {{=button}}} -->
 
+{{if form.record.image != "":}}
+{{=IMG (_src=URL('download',args=form.record.image))}}
+{{pass}}

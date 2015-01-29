@@ -58,6 +58,8 @@ db.camsList.sold.default = False #set boolean
 db.camsList.sold.writable = False
 db.camsList.price.requires = IS_NOT_EMPTY()
 
+# db.camsList.image.readable = False
+
 
 
 # db.camsList.price.requires = IS_FLOAT_IN_RANGE(0, 100000.0, error_message='The price should be in the range 0..100000')

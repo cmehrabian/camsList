@@ -8,7 +8,7 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - api is an example of Hypermedia API support and access control
 #########################################################################
-
+# global button
 def index():
     """
     Landing page for CamsList
@@ -22,10 +22,13 @@ def index():
 
 
 def home():
+    button = ''
+
     show_all = request.args(0) == 'all'
     q = (db.camsList) if show_all else (db.camsList.sold == False)
  
     def generate_del_button(row):
+        
         b = ''
         if auth.user_id == row.user_id:
             b = A('Delete', _class='btn', _href=URL('default', 'delete', args=[row.id], user_signature=True))
@@ -62,9 +65,6 @@ def home():
         links.append(dict(header='Summary', body = shorten_post))
         db.camsList.clmessage.readable = False
 
-    # {{if form.record.image != "":}}
-    #     {{=IMG (_src=URL('download',args=form.record.image))}}
-    # {{pass}}
 
     start_idx = 1 if show_all else 0
     form = SQLFORM.grid(q, args=request.args[:start_idx],
@@ -73,11 +73,14 @@ def home():
         deletable=False,
         csv=False,
         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
-        links=links,
         details = False,
+        upload=URL('download'),
+        # details = True,
+        links=links,
+        
         )
 
-    b = ''
+    button = ''
     if show_all:
         button = A('See unsold', _class='btn', _href=URL('default', 'home'))
     else:
@@ -108,7 +111,7 @@ def add():
 #     p = db.camsList(request.args(0) == 'all')
 
 def view():
-    p = db.camsList(request.args(0)) or redirect(URL('default', 'view'))
+    p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
     form = SQLFORM(db.camsList, record=p, readonly=True)
     return dict(form=form)
 
@@ -129,9 +132,9 @@ def edit():
 @auth.requires_signature()
 def delete():
     p = db.camsList(request.args(0)) or redirect(URL('default', 'index'))
-    if p.user_id != auth.user_id:
+    if auth.user_id != p.user_id:
         session.flash = T('not authorized')
-        redirect(URL('default', 'home'))    
+        redirect(URL('default', 'index'))    
     form = FORM.confirm('Are you sure?')
     if form.accepted:
         db(db.camsList.id == p.id).delete()
