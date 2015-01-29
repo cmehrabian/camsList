@@ -9,7 +9,7 @@
 <ul>
 {{for p in posts:}}
 <li>Posts by: {{=p.name}}, posted on {{=p.date_posted}}
-({{=A('Read', _href=URL('default', 'view', args=[p.id]))}})
+({{=A('View', _href=URL('default', 'view', args=[p.id]))}})
 ({{=A('Delete', _href=URL('default', 'delete', args=[p.id], user_signature=True))}})
 ({{=A('Edit', _href=URL('default', 'edit', args=[p.id]))}})
 <!-- ({{=A('Toggle', _href=URL('default', 'home', args=['all']))}}) -->
@@ -25,15 +25,23 @@ There are no posts.
 {{pass}}
 
 <p>
-
-
-
 <!-- {{=A('Add a post', _class='btn', _href=URL('default', 'add'))}}
+{{=A('Show All', _class='btn', _href=URL('default', 'home', args=['all']))}}
+{{=button}}
+
+ {{button = A('See all', _class='btn', _href=URL('default', 'index', args=['all']))}}
+ {{=button}}
+
+{{if show_all:}}
+{{=A('See unsold', _class='btn', _href=URL('default', 'home'))}}
+{{else:}}
+{{=A('See all', _class='btn', _href=URL('default', 'home', args=['all']))}}
+{{pass}} -->
+
+{{=A('Add a post', _class='btn', _href=URL('default', 'add'))}}
 {{if show_all:}}
 {{=A('See unsold', _class='btn', _href=URL('default', 'index'))}}
 {{else:}}
 {{=A('See all', _class='btn', _href=URL('default', 'index', args=['all']))}}
-{{pass}} -->
-
-<!-- {{=toggle}} -->
+{{pass}}
 </p>

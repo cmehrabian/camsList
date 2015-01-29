@@ -18,8 +18,6 @@ def index():
     # show_all = request.args(0) == 'all'
 
 
-
-
     return dict(posts=posts)
 
 
@@ -42,6 +40,11 @@ def home():
         if auth.user_id == row.user_id:
             b = A('Toggle', _class='btn', _href=URL('default', 'toggle_sold', args=[row.id], user_signature=True))
         return b
+    def generate_view_button(row):
+        b = ''
+        if auth.user_id == row.user_id:
+            b = A('View', _class='btn', _href=URL('default', 'view', args=[row.id]))
+        return b
 
 
     def shorten_post(row):
@@ -51,6 +54,7 @@ def home():
         dict(header='', body= generate_del_button),
         dict(header='', body=generate_edit_button),
         dict(header='', body=generate_toggle_button),
+        dict(header='', body=generate_view_button),
       #  dict(header='', body=generate_sold_toggle_button)
     ]
 
@@ -73,7 +77,7 @@ def home():
         details = False,
         )
 
-    # button = ''
+    b = ''
     if show_all:
         button = A('See unsold', _class='btn', _href=URL('default', 'home'))
     else:
@@ -87,7 +91,7 @@ def toggle_sold():
      is_sold = item.sold
      item.update_record(sold = not is_sold)
      #if URL is /all then redirect to there other wise to home
-     redirect(URL('default', 'home'))#, args=['all']))
+     redirect(URL('default', 'home', args=['all']))
  
     
 @auth.requires_login()
@@ -104,7 +108,7 @@ def add():
 #     p = db.camsList(request.args(0) == 'all')
 
 def view():
-    p = db.camsList(request.args(0)) or redirect(URL('default', 'home'))
+    p = db.camsList(request.args(0)) or redirect(URL('default', 'view'))
     form = SQLFORM(db.camsList, record=p, readonly=True)
     return dict(form=form)
 

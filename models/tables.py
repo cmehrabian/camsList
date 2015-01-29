@@ -36,7 +36,7 @@ db.define_table('camsList',
 
 
 db.camsList.price.label= 'Transaction'
-db.camsList.price.placeholder= '"100 dollars for..."'
+# db.camsList.price.placeholder= '"100 dollars for..."'
 
 db.camsList.listTitle.label = 'Posting'
 db.camsList.clmessage.label = '->' 

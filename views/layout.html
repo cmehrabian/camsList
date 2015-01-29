@@ -100,7 +100,6 @@
         <h1>
         {{=response.title or request.application}}
         <small>"Forget Craig and Angie, Remember Cam"</small>
-
         </h1>
       </div>
     </header>
@@ -124,7 +123,7 @@
           {{end}}
         </div>
         <div class="right">
-        {{=button}}
+          <!-- {{=button}} -->
         </div>
 
         {{if right_sidebar_enabled:}}
@@ -143,7 +142,7 @@
     <footer class="footer">
       {{block footer}} <!-- this is default footer -->
       <div class="footer-content">
-        <div class="copyright pull-left">{{=T('Copyright')}} &#169; 2011</div>
+        <div class="copyright pull-left">{{=T('Copyright')}} &#169; 2015</div>
         <div id="poweredBy" class="pull-right">
           Powered by
           <a href="http://www.metacupcake.com">omari + web2py</a>

@@ -4,3 +4,10 @@
     width: 300px;
     background-color: #b0e0e6;
 }
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    background-color: #b0e0e6;
+}	
